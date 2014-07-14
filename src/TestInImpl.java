@@ -126,7 +126,7 @@ public class TestInImpl extends DataFlowComponentBase {
 	    file = new File("testout.txt");
 	    fw = new FileWriter(file);
 	    bw = new BufferedWriter(fw);
-	    pw = new PrintWriter(pw);
+	    pw = new PrintWriter(bw);
 	} catch (java.lang.Exception ex) {
 	    System.out.println(" Exception in onActivated: " + ex);
 	    return ReturnCode_t.RTC_ERROR;
