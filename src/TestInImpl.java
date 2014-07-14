@@ -14,6 +14,11 @@ import jp.go.aist.rtm.RTC.port.InPort;
 import jp.go.aist.rtm.RTC.util.DataRef;
 import RTC.ReturnCode_t;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.PrintWriter;
+
 /*!
  * @class TestInImpl
  * @brief Test In Component
@@ -21,11 +26,15 @@ import RTC.ReturnCode_t;
  */
 public class TestInImpl extends DataFlowComponentBase {
 
+    private File file;
+    private FileWriter fw;
+    private BufferedWriter bw;
+    private PrintWriter pw;
   /*!
    * @brief constructor
    * @param manager Maneger Object
    */
-	public TestInImpl(Manager manager) {  
+    public TestInImpl(Manager manager) {  
         super(manager);
         // <rtc-template block="initializer">
         m_in_val = new TimedLong();
@@ -113,6 +122,15 @@ public class TestInImpl extends DataFlowComponentBase {
      */
     @Override
     protected ReturnCode_t onActivated(int ec_id) {
+	try {
+	    file = new File("testout.txt");
+	    fw = new FileWriter(file);
+	    bw = new BufferedWriter(fw);
+	    pw = new PrintWriter(pw);
+	} catch (java.lang.Exception ex) {
+	    System.out.println(" Exception in onActivated: " + ex);
+	    return ReturnCode_t.RTC_ERROR;
+	}
         return super.onActivated(ec_id);
     }
 
@@ -127,10 +145,16 @@ public class TestInImpl extends DataFlowComponentBase {
      * 
      * 
      */
-//    @Override
-//    protected ReturnCode_t onDeactivated(int ec_id) {
-//        return super.onDeactivated(ec_id);
-//    }
+    @Override
+    protected ReturnCode_t onDeactivated(int ec_id) {
+	try {
+	    bw.close();
+	} catch (java.lang.Exception ex) {
+	    System.out.println(" Exception in onDeactivated: " + ex);
+	    return ReturnCode_t.RTC_ERROR;
+	}
+        return super.onDeactivated(ec_id);
+    }
 
     /***
      *
@@ -145,6 +169,16 @@ public class TestInImpl extends DataFlowComponentBase {
      */
     @Override
     protected ReturnCode_t onExecute(int ec_id) {
+	try {
+	    if (m_inIn.isNew()) {
+		m_inIn.read();
+		pw.println(m_in.v.data);
+		pw.flush();
+	    }
+	} catch (java.lang.Exception ex) {
+	    System.out.println(" Exception in onExecute: " + ex);
+	    return ReturnCode_t.RTC_ERROR;
+	}
         return super.onExecute(ec_id);
     }
 
