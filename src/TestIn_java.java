@@ -27,7 +27,7 @@ public class TestIn_java implements RtcNewFunc, RtcDeleteFunc, RegisterModuleFun
     	    "description",       "Test In Component",
     	    "version",           "1.0.0",
     	    "vendor",            "ssr",
-    	    "category",          "Tes",
+    	    "category",          "Test",
     	    "activity_type",     "STATIC",
     	    "max_instance",      "1",
     	    "language",          "Java",
