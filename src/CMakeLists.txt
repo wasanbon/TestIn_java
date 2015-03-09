@@ -1,5 +1,5 @@
-set(comp_srcs TestIn.cpp )
-set(standalone_srcs TestInComp.cpp)
+set(comp_srcs TestIn_java.cpp )
+set(standalone_srcs TestIn_javaComp.cpp)
 
 if (DEFINED OPENRTM_INCLUDE_DIRS)
   string(REGEX REPLACE "-I" ";"

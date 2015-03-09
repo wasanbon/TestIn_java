@@ -1,6 +1,6 @@
 // -*- Java -*-
 /*!
- * @file  TestInImpl.java
+ * @file  TestIn_javaImpl.java
  * @brief Test In Component
  * @date  $Date$
  *
@@ -20,11 +20,11 @@ import java.io.BufferedWriter;
 import java.io.PrintWriter;
 
 /*!
- * @class TestInImpl
+ * @class TestIn_javaImpl
  * @brief Test In Component
  *
  */
-public class TestInImpl extends DataFlowComponentBase {
+public class TestIn_javaImpl extends DataFlowComponentBase {
 
     private File file;
     private FileWriter fw;
@@ -34,7 +34,7 @@ public class TestInImpl extends DataFlowComponentBase {
    * @brief constructor
    * @param manager Maneger Object
    */
-    public TestInImpl(Manager manager) {  
+    public TestIn_javaImpl(Manager manager) {  
         super(manager);
         // <rtc-template block="initializer">
         m_in_val = new TimedLong();
