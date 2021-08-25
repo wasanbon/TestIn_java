@@ -1,6 +1,6 @@
 // -*- Java -*-
 /*!
- * @file  TestIn_javaImpl.java
+ * @file  TestIn_javaTestImpl.java
  * @brief Test In Component
  * @date  $Date$
  *
@@ -16,46 +16,35 @@ import java.lang.reflect.Method;
 import RTC.TimedLong;
 import jp.go.aist.rtm.RTC.DataFlowComponentBase;
 import jp.go.aist.rtm.RTC.Manager;
-import jp.go.aist.rtm.RTC.port.InPort;
+import jp.go.aist.rtm.RTC.port.OutPort;
 import jp.go.aist.rtm.RTC.util.DataRef;
 import RTC.ReturnCode_t;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.PrintWriter;
-
-/**
- * TestIn_javaImpl
- * <p>
- * Test In Component
+/*!
+ * @class TestIn_javaTestImpl
+ * @brief Test In Component
  *
  */
-public class TestIn_javaImpl extends DataFlowComponentBase {
+public class TestIn_javaTestImpl extends DataFlowComponentBase {
 
-    private File file;
-    private FileWriter fw;
-    private BufferedWriter bw;
-    private PrintWriter pw;
-  /**
-   * constructor
-   * @param manager Manager Object
+  /*!
+   * @brief constructor
+   * @param manager Maneger Object
    */
-    public TestIn_javaImpl(Manager manager) {  
+	public TestIn_javaTestImpl(Manager manager) {  
         super(manager);
         // <rtc-template block="initializer">
         m_in_val = new TimedLong();
-        initializeParam(m_in_val);
         m_in = new DataRef<TimedLong>(m_in_val);
-        m_inIn = new InPort<TimedLong>("in", m_in);
+        m_inOut = new OutPort<TimedLong>("in", m_in);
         // </rtc-template>
 
     }
 
     /**
      *
-     * The initialize action (on CREATED-&gt;ALIVE transition)
-     * former rtc_init_entry() 
+     * The initialize action (on CREATED->ALIVE transition)
+     * formaer rtc_init_entry() 
      *
      * @return RTC::ReturnCode_t
      * 
@@ -65,16 +54,17 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
     protected ReturnCode_t onInitialize() {
         // Registration: InPort/OutPort/Service
         // <rtc-template block="registration">
-        // Set InPort buffers
-        addInPort("in", m_inIn);
+        
+        // Set OutPort buffer
+        addOutPort("in", m_inOut);
         // </rtc-template>
         return super.onInitialize();
     }
 
-    /**
+    /***
      *
-     * The finalize action (on ALIVE-&gt;END transition)
-     * former rtc_exiting_entry()
+     * The finalize action (on ALIVE->END transition)
+     * formaer rtc_exiting_entry()
      *
      * @return RTC::ReturnCode_t
      * 
@@ -85,7 +75,7 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
 //        return super.onFinalize();
 //    }
 
-    /**
+    /***
      *
      * The startup action when ExecutionContext startup
      * former rtc_starting_entry()
@@ -101,7 +91,7 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
 //        return super.onStartup(ec_id);
 //    }
 
-    /**
+    /***
      *
      * The shutdown action when ExecutionContext stop
      * former rtc_stopping_entry()
@@ -117,7 +107,7 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
 //        return super.onShutdown(ec_id);
 //    }
 
-    /**
+    /***
      *
      * The activated action (Active state entry action)
      * former rtc_active_entry()
@@ -130,19 +120,10 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
      */
     @Override
     protected ReturnCode_t onActivated(int ec_id) {
-        try {
-            file = new File("testout.txt");
-            fw = new FileWriter(file);
-            bw = new BufferedWriter(fw);
-            pw = new PrintWriter(bw);
-        } catch (java.lang.Exception ex) {
-            System.out.println(" Exception in onActivated: " + ex);
-            return ReturnCode_t.RTC_ERROR;
-        }
         return super.onActivated(ec_id);
     }
 
-    /**
+    /***
      *
      * The deactivated action (Active state exit action)
      * former rtc_active_exit()
@@ -155,16 +136,10 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
      */
     @Override
     protected ReturnCode_t onDeactivated(int ec_id) {
-        try {
-            bw.close();
-        } catch (java.lang.Exception ex) {
-            System.out.println(" Exception in onDeactivated: " + ex);
-            return ReturnCode_t.RTC_ERROR;
-        }
         return super.onDeactivated(ec_id);
     }
 
-    /**
+    /***
      *
      * The execution action that is invoked periodically
      * former rtc_active_do()
@@ -177,20 +152,10 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
      */
     @Override
     protected ReturnCode_t onExecute(int ec_id) {
-        try {
-            if (m_inIn.isNew()) {
-                m_inIn.read();
-                pw.println(m_in.v.data);
-                pw.flush();
-            }
-        } catch (java.lang.Exception ex) {
-            System.out.println(" Exception in onExecute: " + ex);
-            return ReturnCode_t.RTC_ERROR;
-        }
         return super.onExecute(ec_id);
     }
 
-    /**
+    /***
      *
      * The aborting action when main logic error occurred.
      * former rtc_aborting_entry()
@@ -206,7 +171,7 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
 //      return super.onAborting(ec_id);
 //  }
 
-    /**
+    /***
      *
      * The error action in ERROR state
      * former rtc_error_do()
@@ -222,7 +187,7 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
 //        return super.onError(ec_id);
 //    }
 
-    /**
+    /***
      *
      * The reset action that is invoked resetting
      * This is same but different the former rtc_init_entry()
@@ -238,7 +203,7 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
 //        return super.onReset(ec_id);
 //    }
 
-    /**
+    /***
      *
      * The state update action that is invoked after onExecute() action
      * no corresponding operation exists in OpenRTm-aist-0.2.0
@@ -254,7 +219,7 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
 //        return super.onStateUpdate(ec_id);
 //    }
 
-    /**
+    /***
      *
      * The action that is invoked when execution context's rate is changed
      * no corresponding operation exists in OpenRTm-aist-0.2.0
@@ -270,24 +235,19 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
 //        return super.onRateChanged(ec_id);
 //    }
 //
-    /**
-     */
-
-    /**
-     */
     // DataInPort declaration
     // <rtc-template block="inport_declare">
-    protected TimedLong m_in_val;
-    protected DataRef<TimedLong> m_in;
-    /*!
-     */
-    protected InPort<TimedLong> m_inIn;
-
     
     // </rtc-template>
 
     // DataOutPort declaration
     // <rtc-template block="outport_declare">
+    protected TimedLong m_in_val;
+    protected DataRef<TimedLong> m_in;
+    /*!
+     */
+    protected OutPort<TimedLong> m_inOut;
+
     
     // </rtc-template>
 
@@ -307,55 +267,55 @@ public class TestIn_javaImpl extends DataFlowComponentBase {
     // </rtc-template>
 
 
-    private void initializeParam(Object target) {
-        Class<?> targetClass = target.getClass();
-        ClassLoader loader = target.getClass().getClassLoader();
-        //
-        Field[] fields = targetClass.getFields();
-        for(Field field : fields) {
-            if(field.getType().isPrimitive()) continue;
-            
-            try {
-                if(field.getType().isArray()) {
-                    Object arrayValue = null;
-                    Class<?> clazz = null;
-                    if(field.getType().getComponentType().isPrimitive()) {
-                        clazz = field.getType().getComponentType();
-                    } else {
-                            clazz = loader.loadClass(field.getType().getComponentType().getName());
-                    }
-                    arrayValue = Array.newInstance(clazz, 0);
-                    field.set(target, arrayValue);
-                    
-                } else {
-                    Constructor<?>[] constList = field.getType().getConstructors();
-                    if(constList.length==0) {
-                        Method[] methodList = field.getType().getMethods();
-                        for(Method method : methodList) {
-                            if(method.getName().equals("from_int")==false) continue;
-                            Object objFld = method.invoke(target, new Object[]{ new Integer(0) });
-                            field.set(target, objFld);
-                            break;
-                        }
-                        
-                    } else {
-                        Class<?> classFld = Class.forName(field.getType().getName(), true, loader);
-                        Object objFld = classFld.newInstance();
-                        initializeParam(objFld);
-                        field.set(target, objFld);
-                    }
-                }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	private void initializeParam(Object target) {
+		Class<?> targetClass = target.getClass();
+		ClassLoader loader = target.getClass().getClassLoader();
+		//
+		Field[] fields = targetClass.getFields();
+		for(Field field : fields) {
+			if(field.getType().isPrimitive()) continue;
+			
+			try {
+				if(field.getType().isArray()) {
+					Object arrayValue = null;
+					Class<?> clazz = null;
+					if(field.getType().getComponentType().isPrimitive()) {
+						clazz = field.getType().getComponentType();
+					} else {
+							clazz = loader.loadClass(field.getType().getComponentType().getName());
+					}
+					arrayValue = Array.newInstance(clazz, 0);
+					field.set(target, arrayValue);
+					
+				} else {
+					Constructor<?>[] constList = field.getType().getConstructors();
+					if(constList.length==0) {
+						Method[] methodList = field.getType().getMethods();
+						for(Method method : methodList) {
+							if(method.getName().equals("from_int")==false) continue;
+							Object objFld = method.invoke(target, new Object[]{ new Integer(0) });
+							field.set(target, objFld);
+							break;
+						}
+						
+					} else {
+			            Class<?> classFld = Class.forName(field.getType().getName(), true, loader);
+						Object objFld = classFld.newInstance();
+						initializeParam(objFld);
+						field.set(target, objFld);
+					}
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

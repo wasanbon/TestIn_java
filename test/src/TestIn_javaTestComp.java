@@ -1,6 +1,6 @@
 // -*- Java -*-
 /*!
- * @file TestIn_javaComp.java
+ * @file TestIn_javaTestComp.java
  * @brief Standalone component
  * @date $Date$
  *
@@ -12,23 +12,22 @@ import jp.go.aist.rtm.RTC.ModuleInitProc;
 import jp.go.aist.rtm.RTC.RTObject_impl;
 import jp.go.aist.rtm.RTC.util.Properties;
 
-/**
- * TestIn_javaComp
- * <p>
- * Standalone component Class
+/*!
+ * @class TestIn_javaTestComp
+ * @brief Standalone component Class
  *
  */
-public class TestIn_javaComp implements ModuleInitProc {
+public class TestIn_javaTestComp implements ModuleInitProc {
 
     public void myModuleInit(Manager mgr) {
-      Properties prop = new Properties(TestIn_java.component_conf);
-      mgr.registerFactory(prop, new TestIn_java(), new TestIn_java());
+      Properties prop = new Properties(TestIn_javaTest.component_conf);
+      mgr.registerFactory(prop, new TestIn_javaTest(), new TestIn_javaTest());
 
       // Create a component
-      RTObject_impl comp = mgr.createComponent("TestIn_java");
+      RTObject_impl comp = mgr.createComponent("TestIn_javaTest");
       if( comp==null ) {
-          System.err.println("Component create failed.");
-          System.exit(0);
+    	  System.err.println("Component create failed.");
+    	  System.exit(0);
       }
       
       // Example
@@ -84,7 +83,7 @@ public class TestIn_javaComp implements ModuleInitProc {
 
         // Set module initialization proceduer
         // This procedure will be invoked in activateManager() function.
-        TestIn_javaComp init = new TestIn_javaComp();
+        TestIn_javaTestComp init = new TestIn_javaTestComp();
         manager.setModuleInitProc(init);
 
         // Activate manager and register to naming service
